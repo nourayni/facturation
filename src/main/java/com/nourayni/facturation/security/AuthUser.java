@@ -15,8 +15,9 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class AuthUser implements UserDetails {
-    private String id;
+public class
+AuthUser implements UserDetails {
+    private String idAuth;
     private String username;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
@@ -26,7 +27,7 @@ public class AuthUser implements UserDetails {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
                 new SimpleGrantedAuthority(role.getRoleName().name())).collect(Collectors.toList());
         return AuthUser.builder()
-                .id(user.getId())
+                .idAuth(user.getId())
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .authorities(authorities)
@@ -37,6 +38,7 @@ public class AuthUser implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
+
 
     @Override
     public String getPassword() {

@@ -82,7 +82,7 @@ public class JwtUtils {
         AuthUser userPrincipal = (AuthUser) authentication.getPrincipal();
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
-                .claim("id", userPrincipal.getId())
+                .claim("id", userPrincipal.getIdAuth())
                 .claim("roles", userPrincipal.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toList()))
@@ -96,7 +96,7 @@ public class JwtUtils {
         AuthUser userPrincipal = (AuthUser) authentication.getPrincipal();
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
-                .claim("id", userPrincipal.getId())
+                .claim("id", userPrincipal.getIdAuth())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME_REFRESH_TOKEN))
                 .signWith(getSecretKey(), SignatureAlgorithm.HS512)
