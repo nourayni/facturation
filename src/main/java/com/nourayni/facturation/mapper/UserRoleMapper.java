@@ -1,7 +1,6 @@
 package com.nourayni.facturation.mapper;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class UserRoleMapper {
     }
 
     public UserResponse userToUserResponse(User user){
-        List<RoleDTO> rolesDTO = user.getRoles().stream().map(role -> 
+        List<RoleDTO> rolesDTO = user.getRoles().stream().map(role ->
                                 roleToRoleTDO(role)).collect(Collectors.toList());
 
         return UserResponse.builder()
