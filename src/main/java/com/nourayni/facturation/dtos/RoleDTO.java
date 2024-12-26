@@ -1,6 +1,5 @@
 package com.nourayni.facturation.dtos;
 
-import com.nourayni.facturation.RoleName;
 
 import lombok.Builder;
 import lombok.Getter;
