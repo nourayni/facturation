@@ -25,7 +25,7 @@ AuthUser implements UserDetails {
 
     public static AuthUser build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
-                new SimpleGrantedAuthority(role.getRoleName().name())).collect(Collectors.toList());
+                new SimpleGrantedAuthority(role.getRole())).collect(Collectors.toList());
         return AuthUser.builder()
                 .idAuth(user.getId())
                 .username(user.getUsername())

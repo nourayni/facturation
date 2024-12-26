@@ -14,7 +14,7 @@ public class UserRoleMapper {
     public RoleDTO roleToRoleTDO(Role role){
         return RoleDTO.builder()
             .id(role.getId())
-            .roleName(role.getRoleName())
+            .roleName(role.getRole())
         .build();
     }
 

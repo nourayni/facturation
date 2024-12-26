@@ -33,3 +33,6 @@ docker-compose.yml
 
 ### VS Code ###
 .vscode/
+
+###
+src/main/resources/application.properties

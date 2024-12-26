@@ -2,8 +2,10 @@ package com.nourayni.facturation.userservice;
 
 import java.util.List;
 
+import com.nourayni.facturation.RoleName;
 import com.nourayni.facturation.dtos.LoginRequest;
 import com.nourayni.facturation.dtos.LoginResponse;
+import com.nourayni.facturation.dtos.RoleDTO;
 import com.nourayni.facturation.dtos.UserRequest;
 import com.nourayni.facturation.dtos.UserResponse;
 import com.nourayni.facturation.entity.User;
@@ -16,5 +18,7 @@ public interface UserService {
     LoginResponse login(LoginRequest request);
 
     LoginResponse refreshToken(String refreshToken);
+
+    RoleDTO saveRole(String roleName);
 
 }

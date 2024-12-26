@@ -9,6 +9,6 @@ import com.nourayni.facturation.entity.Facturation;
 
 public interface FacturationRepository extends JpaRepository<Facturation, String> {
 
-    List<Facturation> findByCreatedAt(LocalDateTime date = LocalDateTime.now());
+    List<Facturation> findByCreatedAt(LocalDateTime date);
 
 }

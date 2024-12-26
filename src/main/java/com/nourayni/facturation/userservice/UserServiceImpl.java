@@ -12,8 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nourayni.facturation.RoleName;
 import com.nourayni.facturation.dtos.LoginRequest;
 import com.nourayni.facturation.dtos.LoginResponse;
+import com.nourayni.facturation.dtos.RoleDTO;
 import com.nourayni.facturation.dtos.UserRequest;
 import com.nourayni.facturation.dtos.UserResponse;
 import com.nourayni.facturation.entity.Role;
@@ -37,10 +39,11 @@ public class UserServiceImpl implements UserService {
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
 
+
     @Override
     public UserResponse saveUser(UserRequest request) {
 
-        Role role = roleRepository.findByRoleName("ROLE_USER").orElseThrow();
+        Role role = roleRepository.findByRole(RoleName.ROLE_USER.name()).orElseThrow();
         List<Role> roles = new ArrayList<>();
         roles.add(role);
 
@@ -104,6 +107,15 @@ public class UserServiceImpl implements UserService {
             // si le refresh token n'est pas valide, on retourne une exception
             return null;
         }
+    }
+
+    @Override
+    public RoleDTO saveRole(String roleName) {
+        Role role = Role.builder()
+            .role(roleName)
+            .build();
+        roleRepository.save(role);
+        return mapper.roleToRoleTDO(role);
     }
 
 }
