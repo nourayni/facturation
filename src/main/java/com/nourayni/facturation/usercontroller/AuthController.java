@@ -1,5 +1,6 @@
 package com.nourayni.facturation.usercontroller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,12 +37,22 @@ public class AuthController {
     // }
     @PostMapping("/register")
     public ResponseEntity<UserResponse> saveUser( @RequestBody UserRequest user){
-        return ResponseEntity.ok(userService.saveUser(user));
+        try {
+            UserResponse userResponse = userService.saveUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
     }
 
     @PostMapping("/role")
     public ResponseEntity<RoleDTO> saveRole(@RequestBody RoleRequest roleName){
-        return ResponseEntity.ok(userService.saveRole(roleName.getRoleName()));
+        try {
+            RoleDTO role = userService.saveRole(roleName.getRoleName());
+            return ResponseEntity.status(HttpStatus.CREATED).body(role);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
     }
 
     @GetMapping("/test")
@@ -51,11 +62,21 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
-        return ResponseEntity.ok(userService.login(request));
+        try {
+            LoginResponse loginResponse = userService.login(request);
+            return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<LoginResponse> refreshToken(@RequestBody RefreshToken refreshToken){
-        return ResponseEntity.ok(userService.refreshToken(refreshToken.getRefreshToken()));
+        try {
+            LoginResponse loginResponse = userService.refreshToken(refreshToken.getRefreshToken());
+            return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 }
