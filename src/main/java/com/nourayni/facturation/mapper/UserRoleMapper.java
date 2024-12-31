@@ -25,7 +25,6 @@ public class UserRoleMapper {
         return UserResponse.builder()
             .id(user.getId())
             .username(user.getUsername())
-            .password(user.getPassword())
             .rolesDTO(rolesDTO)
         .build();
     }

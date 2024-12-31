@@ -21,4 +21,17 @@ public class ProductMapper {
         return null;
     }
 
+    public Product toProduct(ProductResponse productResponse) {
+        if (productResponse != null) {
+            return Product.builder()
+                .id(productResponse.getId())
+                .nomProduct(productResponse.getNomProduct())
+                .price(productResponse.getPrice())
+                .createdAt(productResponse.getCreatedAt())
+                .updateAt(productResponse.getUpdateAt())
+            .build();
+        }
+        return null;
+    }
+
 }

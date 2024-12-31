@@ -42,10 +42,10 @@ public class ProductController {
         }
     
         // Mettre à jour un produit
-        @PostMapping("/{productId}")
-        public ResponseEntity<ProductResponse> updateProduct(@PathVariable String productId, @RequestBody ProductRequest productRequest) {
+        @PostMapping("/{id}")
+        public ResponseEntity<ProductResponse> updateProduct(@PathVariable String id, @RequestBody ProductRequest productRequest) {
             try {
-                ProductResponse productResponse = productService.updateProduct(productId, productRequest);
+                ProductResponse productResponse = productService.updateProduct(id, productRequest);
                 return ResponseEntity.ok(productResponse);
             } catch (ProductNotFoundException ex) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -90,9 +90,9 @@ public class ProductController {
         public ResponseEntity<List<ProductResponse>> getAllProducts(){
             try {
                 List<ProductResponse> productResponse = productService.getAllProducts();
-                return ResponseEntity.ok(productResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(productResponse);
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
             }
         }
 
