@@ -12,7 +12,6 @@ public interface ProductService {
     ProductResponse getProduct(String id);
     void deleteProduct(String id);
     List<ProductResponse> getAllProducts();
-
     PaginatedResponse<ProductResponse> getAllProducts(int page, int size, String sortBy, String direction);
 
 

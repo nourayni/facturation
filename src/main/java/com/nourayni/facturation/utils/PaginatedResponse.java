@@ -3,7 +3,7 @@ package com.nourayni.facturation.utils;
 import java.util.List;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+
 import lombok.Setter;
 @Getter @Setter
 

@@ -1,9 +1,14 @@
 package com.nourayni.facturation.factureservice;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +23,8 @@ import com.nourayni.facturation.mapper.FactureMapper;
 import com.nourayni.facturation.mapper.ProductMapper;
 import com.nourayni.facturation.productservice.ProductService;
 import com.nourayni.facturation.repository.FacturationRepository;
+import com.nourayni.facturation.utils.GenerateNumFacture;
+import com.nourayni.facturation.utils.PaginatedResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,26 +55,58 @@ public class FactureService {
 
     public Facturation saveFacturation(FacturationDTO facturation){
         //facturation.getLignesFacturation().forEach(this::calculateLignePrice);
+
         facturation.getLignesFacturation().forEach(ligne -> calculateLignePrice(ligne));
         Facturation newFacturation = factureMapper.toFacturation(facturation);
+        newFacturation.setNumFacture("drame"+GenerateNumFacture.generateInvoiceNumber());
         newFacturation.setTotalAmount(calculateTotalAmount(newFacturation.getLignesFacturation()));
         return facturationRepository.save(newFacturation);
     }
 
-    public List<Facturation> listFactureToDay(LocalDateTime date){
+    public List<FacturationResponseDTO> listFactureToDay(LocalDate date){
         List<Facturation> factures = facturationRepository.findAll();
         
         List<Facturation>  factureOnDay = factures.stream().filter(facture -> facture.
-                getCreatedAt().toLocalDate().equals(date.toLocalDate())).collect(Collectors.toList());
+                getCreatedAt().toLocalDate().equals(date)).collect(Collectors.toList());
 
                 //Double totalSum = factureOnDay.stream().mapToDouble(Facturation::getTotalAmount).sum();
-        return factureOnDay;
+        return factureOnDay.stream().map(fact -> factureMapper.toFacturationResponseDTO(fact))
+                            .collect(Collectors.toList());
 
     }
 
     public List<FacturationResponseDTO> getAllFactures(){
         List<Facturation> factures = facturationRepository.findAll();
         return factures.stream().map(factureMapper::toFacturationResponseDTO).collect(Collectors.toList());
+    }
+
+    public PaginatedResponse<FacturationResponseDTO> getPaginatedResponseFacture(int page,
+    int size,
+        String sortBy,
+            String direction,
+                String numFacture){
+        Sort sort = direction.equals("desc")
+            ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Facturation> factures;
+
+        if(numFacture != null && !numFacture.isEmpty()){
+            //rechercher par numero de facture
+            factures = facturationRepository.findByNumFactureContaining(numFacture, pageable);
+        }else{
+            //rechercher tous les factures
+            factures = facturationRepository.findAll(pageable);
+        }
+        List<FacturationResponseDTO> facturationResponseDTOs = factures.getContent().stream()
+                        .map(factureMapper::toFacturationResponseDTO).collect(Collectors.toList());
+
+        return new PaginatedResponse<>(facturationResponseDTOs,
+        factures.getNumber(),
+        factures.getSize(),
+        factures.getTotalElements(),
+        factures.getTotalPages());
     }
 
 

@@ -84,7 +84,6 @@ public class ProductServiceImpl implements ProductService {
         // retourner les produits paginés
         return new PaginatedResponse<>(productResponses, products.getNumber(), products.getSize(),
                 products.getTotalElements(), products.getTotalPages());
-        
     }
 
     @Override

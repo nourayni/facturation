@@ -25,6 +25,7 @@ public class FactureMapper {
     public FacturationResponseDTO toFacturationResponseDTO(Facturation facturation){
         return new FacturationResponseDTO(
             facturation.getId(),
+            facturation.getNumFacture(),
             facturation.getClientName(),
             facturation.getClientPhoneNumber(),
             facturation.getLignesFacturation()

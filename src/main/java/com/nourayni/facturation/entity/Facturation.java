@@ -33,6 +33,7 @@ public class Facturation {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    private String numFacture;
 
     private String clientName;
     private String clientPhoneNumber;

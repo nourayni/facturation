@@ -75,11 +75,11 @@ public class ProductController {
         }
     
         // Récupérer tous les produits (avec pagination et tri)
-        @GetMapping
+        @GetMapping("/page/")
         public ResponseEntity<PaginatedResponse<ProductResponse>> getAllProducts(
                 @RequestParam(defaultValue = "0") int page,
-                @RequestParam(defaultValue = "10") int size,
-                @RequestParam(defaultValue = "nomProduct") String sortBy,
+                @RequestParam(defaultValue = "5") int size,
+                @RequestParam(defaultValue = "createdAt") String sortBy,
                 @RequestParam(defaultValue = "asc") String direction
         ) {
             PaginatedResponse<ProductResponse> paginatedProducts = productService.getAllProducts(page, size, sortBy, direction);

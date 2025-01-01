@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 public class FacturationResponseDTO {
     private String id;
+    private String numFacture;
     private String clientName;
     private String clientPhoneNumber;
     private List<LigneFacturationDTO> lignesFacturation;
