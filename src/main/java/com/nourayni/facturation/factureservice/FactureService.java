@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nourayni.facturation.dtos.FacturationDTO;
 import com.nourayni.facturation.dtos.FacturationResponseDTO;
+import com.nourayni.facturation.dtos.FactureDayResponse;
 import com.nourayni.facturation.dtos.LigneFacturationDTO;
 import com.nourayni.facturation.dtos.ProductResponse;
 import com.nourayni.facturation.entity.Facturation;
@@ -63,15 +64,19 @@ public class FactureService {
         return facturationRepository.save(newFacturation);
     }
 
-    public List<FacturationResponseDTO> listFactureToDay(LocalDate date){
+    public FactureDayResponse listFactureToDay(LocalDate date){
         List<Facturation> factures = facturationRepository.findAll();
         
         List<Facturation>  factureOnDay = factures.stream().filter(facture -> facture.
                 getCreatedAt().toLocalDate().equals(date)).collect(Collectors.toList());
 
-                //Double totalSum = factureOnDay.stream().mapToDouble(Facturation::getTotalAmount).sum();
-        return factureOnDay.stream().map(fact -> factureMapper.toFacturationResponseDTO(fact))
+                Double totalSum = factureOnDay.stream().mapToDouble(Facturation::getTotalAmount).sum();
+                List<FacturationResponseDTO> facturation =  factureOnDay.stream().map(fact -> factureMapper.toFacturationResponseDTO(fact))
                             .collect(Collectors.toList());
+        return FactureDayResponse.builder()
+        .facturationResponseDTOs(facturation)
+        .totalAmountDay(totalSum)
+        .build();
 
     }
 
@@ -109,6 +114,11 @@ public class FactureService {
         factures.getTotalPages());
     }
 
+    public FacturationResponseDTO getFacture(String id){
+        Facturation facture = facturationRepository.findById(id).orElseThrow(() ->
+                                        new IllegalArgumentException("Facture non trouve"));
+        return factureMapper.toFacturationResponseDTO(facture);
+    }
 
 
 }

@@ -1,12 +1,12 @@
 package com.nourayni.facturation.factureController;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nourayni.facturation.dtos.FacturationDTO;
 import com.nourayni.facturation.dtos.FacturationResponseDTO;
+import com.nourayni.facturation.dtos.FactureDayResponse;
 import com.nourayni.facturation.entity.Facturation;
 import com.nourayni.facturation.factureservice.FactureService;
 import com.nourayni.facturation.mapper.FactureMapper;
@@ -63,10 +64,20 @@ public class FactureController {
     }
 
     @GetMapping("/day")
-    public ResponseEntity<List<FacturationResponseDTO>> getFactureToday(@RequestParam String date){
+    public ResponseEntity<FactureDayResponse> getFactureToday(@RequestParam String date){
         try {
-            List<FacturationResponseDTO> factures = factureService.listFactureToDay(LocalDate.parse(date));
+            FactureDayResponse factures = factureService.listFactureToDay(LocalDate.parse(date));
             return ResponseEntity.status(HttpStatus.OK).body(factures);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FacturationResponseDTO> getFactureById(@PathVariable String id) {
+        try {
+            FacturationResponseDTO facture = factureService.getFacture(id);
+            return ResponseEntity.status(HttpStatus.OK).body(facture);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
